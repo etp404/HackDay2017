@@ -13,7 +13,10 @@ while i<100:
     lineSplit = line.split(",")
     trainLabels.append(1 if lineSplit[2] == 'True' else 0)
     musicUrl = lineSplit[3][:-1]
-    trainMp3Content[i,:] = trainLabels[i]
+    music = read_mp3(musicUrl)
+    musicNPArray = numpy.asarray(music[0:1000, 1])
+    musicToAppend = musicNPArray.transpose()
+    trainMp3Content[i,:] = musicToAppend
     i += 1
 
 
@@ -26,8 +29,13 @@ while i<100:
     lineSplit = line.split(",")
     testLabels.append(1 if lineSplit[2] == 'True' else 0)
     musicUrl = lineSplit[3][:-1]
-    testMp3Content[i,:] = 0
+    music = read_mp3(musicUrl)
+    musicNPArray = numpy.asarray(music[0:1000, 1])
+    musicToAppend = musicNPArray.transpose()
+    trainMp3Content[i,:] = musicToAppend
     i += 1
+
+print "Chance validation level: " + str(float(sum(testLabels))/len(testLabels) )
 
 batch_size = 3;
 trainLabelsArray = numpy.asarray(trainLabels)
