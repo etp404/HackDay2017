@@ -13,10 +13,7 @@ while i<10:
     lineSplit = line.split(",")
     trainLabels.append(1 if lineSplit[2] == 'True' else 0)
     musicUrl = lineSplit[3][:-1]
-    music = read_mp3(musicUrl)
-    musicNPArray = numpy.asarray(music[0:1000, 1])
-    musicToAppend = musicNPArray.transpose()
-    trainMp3Content[i,:] = musicToAppend
+    trainMp3Content[i,:] = trainLabels[i]
     i += 1
 
 
@@ -29,18 +26,13 @@ while i<10:
     lineSplit = line.split(",")
     testLabels.append(1 if lineSplit[2] == 'True' else 0)
     musicUrl = lineSplit[3][:-1]
-    music = read_mp3(musicUrl)
-    musicNPArray = numpy.asarray(music[0:1000, 1])
-    musicToAppend = musicNPArray.transpose()
-    trainMp3Content[i,:] = musicToAppend
+    trainMp3Content[i,:] = testLabels[i]
     i += 1
 
 batch_size = 3;
 trainLabelsArray = numpy.asarray(trainLabels)
 train_iter = mx.io.NDArrayIter(trainMp3Content, trainLabelsArray, batch_size, shuffle=True)
 test_iter = mx.io.NDArrayIter(testMp3Content, numpy.asarray(testLabels), batch_size, shuffle=True)
-
-
 
 # Create a place holder variable for the input data
 data = mx.sym.Variable('data')
@@ -80,3 +72,4 @@ model.fit(
     eval_data=test_iter, # validation data
     batch_end_callback = mx.callback.Speedometer(batch_size, 200) # output progress for each 200 data batches
 )
+
