@@ -32,7 +32,7 @@ while i<100:
     music = read_mp3(musicUrl)
     musicNPArray = numpy.asarray(music[0:1000, 1])
     musicToAppend = musicNPArray.transpose()
-    trainMp3Content[i,:] = musicToAppend
+    testMp3Content[i,:] = musicToAppend
     i += 1
 
 print "Chance validation level: " + str(float(sum(testLabels))/len(testLabels) )
