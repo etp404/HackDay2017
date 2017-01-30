@@ -20,12 +20,12 @@ while i<10:
     i += 1
 
 
-test = open('training_data.csv', 'r')
+test = open('test_data.csv', 'r')
 testLabels=[]
 testMp3Content = ndarray((10,1000))
 i=0
 while i<10:
-    line = train.readline()
+    line = test.readline()
     lineSplit = line.split(",")
     testLabels.append(1 if lineSplit[2] == 'True' else 0)
     musicUrl = lineSplit[3][:-1]
