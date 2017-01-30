@@ -6,9 +6,9 @@ from reading_music import read_mp3
 
 train = open('training_data.csv', 'r')
 trainLabels=[]
-trainMp3Content = ndarray((10,1000))
+trainMp3Content = ndarray((100,1000))
 i=0
-while i<10:
+while i<100:
     line = train.readline()
     lineSplit = line.split(",")
     trainLabels.append(1 if lineSplit[2] == 'True' else 0)
@@ -19,20 +19,21 @@ while i<10:
 
 test = open('test_data.csv', 'r')
 testLabels=[]
-testMp3Content = ndarray((10,1000))
+testMp3Content = ndarray((100,1000))
 i=0
-while i<10:
+while i<100:
     line = test.readline()
     lineSplit = line.split(",")
     testLabels.append(1 if lineSplit[2] == 'True' else 0)
     musicUrl = lineSplit[3][:-1]
-    trainMp3Content[i,:] = testLabels[i]
+    testMp3Content[i,:] = 0
     i += 1
 
 batch_size = 3;
 trainLabelsArray = numpy.asarray(trainLabels)
 train_iter = mx.io.NDArrayIter(trainMp3Content, trainLabelsArray, batch_size, shuffle=True)
-test_iter = mx.io.NDArrayIter(testMp3Content, numpy.asarray(testLabels), batch_size, shuffle=True)
+testLabelsArray = numpy.asarray(testLabels)
+test_iter = mx.io.NDArrayIter(testMp3Content, testLabelsArray, batch_size, shuffle=True)
 
 # Create a place holder variable for the input data
 data = mx.sym.Variable('data')
