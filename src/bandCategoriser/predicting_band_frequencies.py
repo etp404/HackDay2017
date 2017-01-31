@@ -3,37 +3,41 @@ import csv
 import mxnet as mx
 import numpy
 from numpy import ndarray
-from scipy.signal import normalize
 
-artistMap = {0: "Bach", 1: "Beatles"}
+artistMap = {}
+artistsToClassify = csv.reader(open("artists.csv"))
+for artist in artistsToClassify:
+    artistMap[float(artist[1])] = artist[2]
+
 csv_reader_test = csv.reader(open('transformed_sample_band_data_train.csv', 'r'))
 trainLabels=[]
-trainMp3Content = ndarray((0,3387))
+spectrumSize = 338688
+trainMp3Content = ndarray((0, spectrumSize))
 i=0
 for row in csv_reader_test:
     trainLabels.append(float(row[0]))
     trainAsarray = numpy.asarray(row[1:], float)
     trainNormalisedArray= numpy.divide(trainAsarray, max(trainAsarray))
 
-    if (trainNormalisedArray.shape != (3387,)):
+    if (trainNormalisedArray.shape != (spectrumSize,)):
         print "Weirdly shaped item: " + str(trainNormalisedArray.shape)
         continue
-    trainNormalisedArray = trainNormalisedArray.reshape(1, 3387)
+    trainNormalisedArray = trainNormalisedArray.reshape(1, spectrumSize)
     trainMp3Content = numpy.append(trainMp3Content, trainNormalisedArray, 0)
 
 print ("training data read in")
-csv_reader_train = csv.reader(open('transformed_sample_band_data_testn.csv', 'r'))
+csv_reader_train = csv.reader(open('transformed_sample_band_data_test.csv', 'r'))
 testLabels=[]
-testMp3Content = ndarray((0,3387))
+testMp3Content = ndarray((0, spectrumSize))
 i=0
 for row in csv_reader_train:
     testLabels.append(float(row[0]))
     testAsarray = numpy.asarray(row[1:], float)
     testNormalisedArray= numpy.divide(testAsarray, max(testAsarray))
-    if (testNormalisedArray.shape != (3387, )):
+    if (testNormalisedArray.shape != (spectrumSize,)):
         print "Weirdly shaped item: " +str(testNormalisedArray.shape)
         continue
-    testNormalisedArray = testNormalisedArray.reshape(1, 3387)
+    testNormalisedArray = testNormalisedArray.reshape(1, spectrumSize)
     testMp3Content = numpy.append(testMp3Content, testNormalisedArray, 0)
 
 
@@ -89,16 +93,16 @@ model.fit(
 print ("untouched data read in")
 csv_reader_untouched = csv.reader(open('transformed_sample_band_data_untouched.csv', 'r'))
 untouchedLabels=[]
-untouchedMp3Content = ndarray((0,3387))
+untouchedMp3Content = ndarray((0, spectrumSize))
 i=0
 for row in csv_reader_untouched:
     untouchedLabels.append(float(row[0]))
     untouchedAsarray = numpy.asarray(row[1:], float)
     untouchedNormalisedArray= numpy.divide(untouchedAsarray, max(untouchedAsarray))
-    if (untouchedNormalisedArray.shape != (3387, )):
+    if (untouchedNormalisedArray.shape != (spectrumSize,)):
         print "Weirdly shaped item: " + str(untouchedNormalisedArray.shape)
         continue
-    untouchedNormalisedArray = untouchedNormalisedArray.reshape(1, 3387)
+    untouchedNormalisedArray = untouchedNormalisedArray.reshape(1, spectrumSize)
     untouchedMp3Content = numpy.append(untouchedMp3Content, untouchedNormalisedArray, 0)
 
 untouchedLabelsArray = numpy.asarray(untouchedLabels)
