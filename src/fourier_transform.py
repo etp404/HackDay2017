@@ -33,37 +33,44 @@ csv_writer = csv.writer(transformedMusicFile)
 totalNumber = sum(1 for row in testDataFile)
 testDataFile.seek(0)
 i = 0;
-for line in testDataFile:
-    lineSplit = line.split(",")
-    print "Transforming test line " + str(i) + " of " + str(totalNumber)
-    year = lineSplit[1]
-    label = 1 if lineSplit[2] == 'True' else 0
-    musicUrl = lineSplit[3][:-1]
-    transformedMusic = read_and_transformMp3(musicUrl)
-    lineToWrite = numpy.insert(transformedMusic, 0, label)
-    lineToWrite = numpy.insert(lineToWrite, 0, year)
-    csv_writer.writerow(lineToWrite)
-    i+=1;
-transformedMusicFile.close()
-testDataFile.close()
+# for line in testDataFile:
+#     lineSplit = line.split(",")
+#     print "Transforming test line " + str(i) + " of " + str(totalNumber)
+#     year = lineSplit[1]
+#     label = 1 if lineSplit[2] == 'True' else 0
+#     musicUrl = lineSplit[3][:-1]
+#     transformedMusic = read_and_transformMp3(musicUrl)
+#     lineToWrite = numpy.insert(transformedMusic, 0, label)
+#     lineToWrite = numpy.insert(lineToWrite, 0, year)
+#     csv_writer.writerow(lineToWrite)
+#     i+=1;
+# transformedMusicFile.close()
+# testDataFile.close()
 
 
 trainDataFile = open('training_data.csv', 'r')
-transformedMusicFile = open('transformed_training_data.csv', 'w')
+transformedMusicFile = open('transformed_training_data.csv', 'wa')
 csv_writer = csv.writer(transformedMusicFile)
 totalNumber = sum(1 for row in trainDataFile)
 trainDataFile.seek(0)
 i=0
 for line in trainDataFile:
+    while i<5627:
+        i+=1
+        continue
     lineSplit = line.split(",")
     print "Transforming training line " + str(i) + " of " + str(totalNumber)
     year = lineSplit[1]
     label = 1 if lineSplit[2] == 'True' else 0
     musicUrl = lineSplit[3][:-1]
-    transformedMusic = read_and_transformMp3(musicUrl)
-    lineToWrite = numpy.insert(transformedMusic, 0, label)
-    lineToWrite = numpy.insert(lineToWrite, 0, year)
-    csv_writer.writerow(lineToWrite)
-    i+=1
+    try:
+        transformedMusic = read_and_transformMp3(musicUrl)
+        lineToWrite = numpy.insert(transformedMusic, 0, label)
+        lineToWrite = numpy.insert(lineToWrite, 0, year)
+        csv_writer.writerow(lineToWrite)
+        i+=1
+    except ValueError:
+        continue
+
 transformedMusicFile.close()
 trainDataFile.close()
